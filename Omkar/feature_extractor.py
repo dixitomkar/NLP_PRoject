@@ -48,6 +48,6 @@ for i in range(0,len(all_words)):
     else:
         sent.append(all_words[i][0])
 
-file2.cloprse()
+file2.close()
 print("COmplete")        
             
