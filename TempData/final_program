@@ -4,17 +4,17 @@ from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.preprocessing import LabelBinarizer
 import sklearn
 
-cd C:\Users\Oma\Desktop\Desktop\Fall 2016\NLP\project\tagset\tagger-master\dataset
-
-%%time
 import nltk
 import pandas as pd
 sent=[]
 a=pd.read_csv('t11', sep=" ", header = None) 
 
 all_words=a.as_matrix()
+import nltk.tag.stanford as st
+PATH_TO_GZ = 'C:/Users/Oma/Desktop/Desktop/Fall 2016/NLP/project/tagset/tagger-master/dataset/stanford-ner/classifiers/english.all.3class.distsim.crf.ser.gz'
+PATH_TO_JAR = 'C:/Users/Oma/Desktop/Desktop/Fall 2016/NLP/project/tagset/tagger-master/dataset/stanford-ner/stanford-ner.jar'
+tagger = st.StanfordNERTagger(PATH_TO_GZ, PATH_TO_JAR) 
 
-%%time
 sent=[]
 train_sents=[]
 
@@ -25,11 +25,25 @@ for i in range(0,100):
         sent=[]
     else:
         sent.append(all_words[i])
-print("COmplete")   
+print("COmplete stage1")  
+
 
 def word2features(sent, i):
     word = sent[i][0]
     postag = sent[i][1]
+    temp=tagger.tag(word.split())[0][1]
+    gazLoc="0"
+    gazPer="0"
+    gazOrg="0"
+    print(word," " ,temp)
+    if(temp=='ORGANIZATION'):
+        gazOrg="1"
+    if(temp=='LOCATION'):
+        gazLoc="1"
+    if(temp=='PERSON'):
+        gazPer="1"
+            
+    
     features = [
         'bias',
         'word.lower=' + word.lower(),
@@ -40,6 +54,9 @@ def word2features(sent, i):
         'word.isdigit=%s' % word.isdigit(),
         'postag=' + postag,
         'postag[:2]=' + postag[:2],
+        'gazOrg=' + gazOrg,
+        'gazLoc=' + gazLoc,
+        'gazPer=' + gazPer,
     ]
     if i > 0:
         word1 = sent[i-1][0]
@@ -78,9 +95,6 @@ def sent2labels(sent):
 
 def sent2tokens(sent):
     return [token for token, postag, label in sent]
-    
-sent2features(train_sents[1])[0]
-
 
 
 
