@@ -3,7 +3,7 @@ This program is for extracting the features. Use output of this file to Weka.
 '''
 import nltk
 sent=[]
-a=pd.read_csv('train', sep=" ", header = None) 
+a=pd.read_csv('trainfile', sep=" ", header = None) 
 all_words=a.as_matrix()
 location_suffix_trigger=set(['city','street','river','boulevard'])
 location_prefix_trigger=set(['at'])
