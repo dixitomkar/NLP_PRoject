@@ -1,3 +1,6 @@
+''' 
+This program is for extracting the features. Use output of this file to Weka. 
+'''
 import nltk
 sent=[]
 a=pd.read_csv('train', sep=" ", header = None) 
